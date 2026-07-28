@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyani Sahur AI | Premium Edition</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Marked.js for Markdown Processing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  
+  <!-- DOMPurify for XSS Protection -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              gold: '#D4AF37', // Premium Gold
+              goldHover: '#F3E5AB',
+              goldDark: '#AA8C2C',
+              dark: '#171717',
+              graybg: '#F9F9F9',
+              sidebar: '#F9F9F9', // ChatGPT style sidebar
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out forwards',
+            'slide-up': 'slideUp 0.3s ease-out forwards',
+            'spin-slow': 'spin 3s linear infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Premium Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e5e5e5;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4d4d4;
+    }
+
+    /* Base Styling */
+    body {
+      background-color: #ffffff;
+      color: #171717;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Markdown Prose Styling */
+    .prose h1, .prose h2, .prose h3, .prose h4 {
+      font-weight: 600;
+      color: #171717;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    .prose p { margin-bottom: 1em; line-height: 1.7; }
+    .prose a { color: #D4AF37; text-decoration: none; font-weight: 500; }
+    .prose a:hover { text-decoration: underline; }
+    .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+    .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+    .prose strong { font-weight: 600; color: #171717; }
+    .prose blockquote { border-left: 4px solid #e5e5e5; padding-left: 1em; color: #525252; font-style: italic; }
+    
+    /* Code Blocks */
+    .prose pre {
+      background-color: #1e1e1e !important;
+      color: #d4d4d4 !important;
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      overflow-x: auto;
+      margin: 1.5em 0;
+      font-size: 0.875rem;
+    }
+    .prose code:not(pre code) {
+      background-color: #f3f4f6;
+      color: #ef4444;
+      padding: 0.2em 0.4em;
+      border-radius: 0.375rem;
+      font-size: 0.875em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom Textarea auto-resize hiding scrollbar */
+    textarea {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    textarea::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Gradient Text for Premium Feel */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #D4AF37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* SVG Logo Gradient */
+    .svg-gold-grad {
+      fill: url(#goldGradient);
+    }
+  </style>
+</head>
+
+<body class="flex flex-col h-screen overflow-hidden selection:bg-brand-goldHover selection:text-brand-dark">
+
+  <!-- Shared SVG Definitions for Premium Logo -->
+  <svg class="hidden">
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#D4AF37" />
+        <stop offset="50%" stop-color="#F3E5AB" />
+        <stop offset="100%" stop-color="#AA8C2C" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- PAGE 1: AUTHENTICATION GATEWAY -->
+  <div id="security-page" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+    <div class="w-full max-w-md p-8 flex flex-col items-center animate-slide-up">
+      
+      <!-- Premium Logo -->
+      <div class="mb-8 relative flex items-center justify-center">
+        <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Abstract G & S interlaced -->
+          <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50" stroke="url(#goldGradient)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M50 25C36.193 25 25 36.193 25 50C25 63.807 36.193 75 50 75C63.807 75 75 63.807 75 50" stroke="url(#goldGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="80 20"/>
+          <circle cx="50" cy="50" r="10" fill="url(#goldGradient)"/>
+        </svg>
+      </div>
+
+      <h1 class="text-3xl font-semibold tracking-tight text-brand-dark mb-2 text-center">
+        Welcome to <span class="gold-gradient-text font-bold">Gyani Sahur</span>
+      </h1>
+      
+      <p class="text-gray-500 text-sm text-center mb-8 px-4">
+        Enterprise intelligence platform by VsiStudio. Please authenticate to access the workspace.
+      </p>
+
+      <form id="auth-form" onsubmit="handleVerification(event)" class="w-full flex flex-col gap-4">
+        <div class="relative w-full">
+          <input 
+            type="password" 
+            id="password-input" 
+            placeholder="Enter access credentials..." 
+            required 
+            class="w-full px-5 py-4 bg-white border border-gray-300 rounded-xl text-brand-dark text-sm focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all shadow-sm"
+          >
+          <button 
+            type="button" 
+            onclick="togglePasswordVisibility()" 
+            class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-brand-dark transition"
+          >
+            <i id="toggle-eye" class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <div id="auth-error" class="hidden text-xs text-red-600 font-medium bg-red-50 border border-red-100 rounded-lg p-3 text-center">
+          Invalid credentials. Please try again.
+        </div>
+
+        <button 
+          type="submit" 
+          id="verify-btn"
+          class="w-full py-4 px-6 bg-brand-dark hover:bg-black text-white font-medium rounded-xl transition duration-200 flex items-center justify-center gap-2"
+        >
+          <span>Continue</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAGE 2: MAIN WORKSPACE -->
+  <div id="app-workspace" class="hidden flex h-screen w-full relative bg-white">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="absolute md:relative z-40 w-[260px] h-full bg-brand-sidebar flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 border-r border-gray-200">
+      
+      <!-- New Chat Button -->
+      <div class="p-3">
+        <button 
+          onclick="createNewChatSession()" 
+          class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-brand-dark hover:bg-gray-200 rounded-lg transition"
+        >
+          <div class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          </div>
+          New chat
+          <div class="ml-auto opacity-0 md:opacity-100 text-xs text-gray-400 border border-gray-300 rounded px-1.5"><i class="fa-solid fa-pen-to-square text-[10px]"></i></div>
+        </button>
+      </div>
+
+      <!-- History List -->
+      <div class="flex-1 overflow-y-auto px-3 py-2 space-y-1" id="chat-sessions-list">
+        <!-- Sessions inserted via JS -->
+      </div>
+
+      <!-- Sidebar Footer (User & Settings) -->
+      <div class="p-3 border-t border-gray-200">
+        <button 
+          onclick="openSettingsModal()" 
+          class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium text-brand-dark hover:bg-gray-200 rounded-lg transition"
+        >
+          <div class="w-7 h-7 rounded-full bg-brand-dark text-brand-gold flex items-center justify-center text-xs font-bold shrink-0">
+            VS
+          </div>
+          <span class="truncate flex-1 text-left">Settings & Profile</span>
+          <i class="fa-solid fa-gear text-gray-400 text-xs"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebar-overlay" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full relative min-w-0 bg-white">
+      
+      <!-- Top Nav -->
+      <header class="flex items-center justify-between px-3 py-2.5 h-14 sticky top-0 z-10 bg-white text-brand-dark">
+        <div class="flex items-center gap-2">
+          <!-- Mobile Menu Toggle -->
+          <button onclick="toggleMobileSidebar()" class="md:hidden p-2 text-gray-500 hover:text-brand-dark rounded-md hover:bg-gray-100">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          
+          <!-- Desktop Sidebar Toggle -->
+          <button onclick="toggleDesktopSidebar()" class="hidden md:flex p-2 text-gray-500 hover:text-brand-dark rounded-md hover:bg-gray-100 tooltip" title="Close sidebar">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+
+          <!-- Model Selector Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition text-lg font-semibold text-gray-700">
+              <span id="active-model-text" class="flex items-center gap-1.5">
+                Gyani Sahur <span class="text-brand-gold text-sm"><i class="fa-solid fa-sparkles"></i></span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div class="absolute left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-1">
+              <button onclick="setEngineMode('general')" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left transition">
+                <div class="flex items-center gap-3">
+                  <i class="fa-solid fa-bolt text-gray-400 w-4 text-center"></i>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">General Intelligence</div>
+                    <div class="text-xs text-gray-500">Fast, everyday tasks</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-check text-brand-gold text-sm hidden check-general"></i>
+              </button>
+              <button onclick="setEngineMode('search')" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left transition">
+                <div class="flex items-center gap-3">
+                  <i class="fa-solid fa-globe text-blue-500 w-4 text-center"></i>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">Deep Search</div>
+                    <div class="text-xs text-gray-500">Grounded real-time web info</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-check text-brand-gold text-sm hidden check-search"></i>
+              </button>
+              <button onclick="setEngineMode('image')" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-left transition border-t border-gray-100">
+                <div class="flex items-center gap-3">
+                  <i class="fa-solid fa-wand-magic-sparkles text-purple-500 w-4 text-center"></i>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">Imagen 4.0</div>
+                    <div class="text-xs text-gray-500">Generate premium images</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-check text-brand-gold text-sm hidden check-image"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pr-2">
+          <button onclick="clearCurrentChat()" class="p-2 text-gray-400 hover:text-red-500 rounded-md hover:bg-gray-100 transition" title="Clear Chat">
+            <i class="fa-solid fa-trash-can text-sm"></i>
+          </button>
+          <button onclick="lockSystem()" class="p-2 text-gray-400 hover:text-brand-dark rounded-md hover:bg-gray-100 transition" title="Lock Portal">
+            <i class="fa-solid fa-lock text-sm"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Chat Area -->
+      <div id="messages-container" class="flex-1 overflow-y-auto w-full pb-32">
+        
+        <!-- Empty State / Welcome Screen -->
+        <div id="welcome-hero" class="flex flex-col items-center justify-center h-full max-w-3xl mx-auto px-4 py-10 animate-fade-in">
+          
+          <div class="w-16 h-16 mb-6">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5C25.147 5 5 25.147 5 50C5 74.853 25.147 95 50 95C74.853 95 95 74.853 95 50" stroke="url(#goldGradient)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M50 25C36.193 25 25 36.193 25 50C25 63.807 36.193 75 50 75C63.807 75 75 63.807 75 50" stroke="url(#goldGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="80 20"/>
+              <circle cx="50" cy="50" r="10" fill="url(#goldGradient)"/>
+            </svg>
+          </div>
+          
+          <h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">How can I help you today?</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
+            <!-- Suggestion Cards -->
+            <button onclick="usePresetPrompt('Plan a premium UI design system for a modern web app.')" class="flex flex-col text-left p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition group">
+              <div class="font-medium text-sm text-gray-800 mb-1 flex justify-between items-center">
+                Design System <i class="fa-solid fa-arrow-right text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+              </div>
+              <div class="text-sm text-gray-500">Plan a premium UI design</div>
+            </button>
+
+            <button onclick="usePresetPrompt('Research the latest enterprise AI trends in 2026.')" class="flex flex-col text-left p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition group">
+              <div class="font-medium text-sm text-gray-800 mb-1 flex justify-between items-center">
+                Market Research <i class="fa-solid fa-arrow-right text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+              </div>
+              <div class="text-sm text-gray-500">Latest enterprise AI trends</div>
+            </button>
+
+            <button onclick="usePresetPrompt('Create a minimalist golden geometric logo concept.')" class="flex flex-col text-left p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition group">
+              <div class="font-medium text-sm text-gray-800 mb-1 flex justify-between items-center">
+                Generate Image <i class="fa-solid fa-arrow-right text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+              </div>
+              <div class="text-sm text-gray-500">Minimalist geometric concept</div>
+            </button>
+
+            <button onclick="usePresetPrompt('Write HTML/CSS code for a modern dashboard widget.')" class="flex flex-col text-left p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition group">
+              <div class="font-medium text-sm text-gray-800 mb-1 flex justify-between items-center">
+                Write Code <i class="fa-solid fa-arrow-right text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+              </div>
+              <div class="text-sm text-gray-500">HTML/CSS dashboard widget</div>
+            </button>
+          </div>
+        </div>
+        <!-- Chat bubbles appended here -->
+      </div>
+
+      <!-- Bottom Input Dock -->
+      <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4 md:px-8">
+        <div class="max-w-3xl mx-auto relative">
+          
+          <!-- Attachment Preview -->
+          <div id="attachment-preview-container" class="hidden absolute bottom-full mb-3 left-0 flex items-center gap-2 p-2 bg-white rounded-xl border border-gray-200 shadow-sm w-fit">
+            <img id="attachment-img" src="" class="w-10 h-10 object-cover rounded-lg border border-gray-100">
+            <div class="flex flex-col mr-2">
+              <span class="text-xs font-semibold text-gray-800 max-w-[120px] truncate" id="attachment-name">image.png</span>
+              <span class="text-[10px] text-gray-500">Image attached</span>
+            </div>
+            <button onclick="removeAttachment()" class="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Input Wrapper -->
+          <div class="relative flex flex-col w-full py-3 px-4 bg-white border border-gray-300 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.05)] focus-within:ring-1 focus-within:ring-gray-300 transition-all">
+            
+            <textarea 
+              id="prompt-textarea" 
+              rows="1" 
+              placeholder="Message Gyani Sahur..." 
+              class="w-full max-h-[200px] bg-transparent border-none text-gray-800 text-[15px] focus:outline-none resize-none py-1 pr-[80px]"
+              onkeydown="handleKeyDown(event)"
+              oninput="autoResizeTextarea(this)"
+            ></textarea>
+
+            <!-- Buttons right aligned -->
+            <div class="absolute right-3 bottom-2.5 flex items-center gap-1.5 bg-white pl-2">
+              
+              <input type="file" id="image-upload-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+              
+              <button 
+                type="button" 
+                onclick="document.getElementById('image-upload-input').click()" 
+                class="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition"
+                title="Attach Image"
+              >
+                <i class="fa-solid fa-paperclip text-lg"></i>
+              </button>
+
+              <butto
