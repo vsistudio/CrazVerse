@@ -21,3 +21,15 @@ The static onboarding page is built on Firebase Authentication (Google) and Clou
 - `usernames/{username}` is an immutable username claim.
 
 The client uses a Firestore transaction to create both documents. The security rules require both documents to agree, which prevents a user from reserving extra usernames or taking a username that is already claimed.
+
+
+
+Install Node.js 18+ first. Then run these commands from the repository root:
+
+```bash
+npm install --global wrangler
+wrangler login
+wrangler pages project create crazverse --production-branch main
+wrangler pages deploy . --project-name crazverse --branch main
+```
+
