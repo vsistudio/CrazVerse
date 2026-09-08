@@ -1,0 +1,31 @@
+rules_version = '2';
+
+// Deploy with: firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /players/{userId} {
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.keys().hasOnly(['username', 'age', 'gender', 'googleDisplayName', 'email', 'photoURL', 'createdAt'])
+                    && request.resource.data.username is string
+                    && request.resource.data.username.matches('^[a-z0-9_]{3,20}$')
+                    && request.resource.data.age is int
+                    && request.resource.data.age >= 4
+                    && request.resource.data.age <= 120
+                    && request.resource.data.gender in ['Woman', 'Man', 'Non-binary', 'Prefer not to say']
+                    && getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username)).data.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if false;
+    }
+
+    match /usernames/{username} {
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+                    && username.matches('^[a-z0-9_]{3,20}$')
+                    && getAfter(/databases/$(database)/documents/players/$(request.auth.uid)).data.username == username;
+      allow read: if request.auth != null;
+      allow update, delete: if false;
+    }
+  }
+}
