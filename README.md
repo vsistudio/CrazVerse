@@ -22,7 +22,11 @@ The static onboarding page is built on Firebase Authentication (Google) and Clou
 
 The client uses a Firestore transaction to create both documents. The security rules require both documents to agree, which prevents a user from reserving extra usernames or taking a username that is already claimed.
 
+codex/create-premium-cinematic-website-for-crazverse-w2c026
 ## Cloudflare Pages deployment
+=======
+
+ main
 
 Install Node.js 18+ first. Then run these commands from the repository root:
 
@@ -32,5 +36,7 @@ wrangler login
 wrangler pages project create crazverse --production-branch main
 wrangler pages deploy . --project-name crazverse --branch main
 ```
-
+ codex/create-premium-cinematic-website-for-crazverse-w2c026
 After the first deploy, add the Cloudflare Pages production URL and any custom domain to Firebase Authentication's **Authorized domains**. Deploy the Firestore rules separately with `firebase deploy --only firestore:rules`.
+=======
+main
