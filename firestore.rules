@@ -9,10 +9,15 @@ service cloud.firestore {
                     && request.resource.data.keys().hasOnly(['username', 'age', 'gender', 'googleDisplayName', 'email', 'photoURL', 'createdAt'])
                     && request.resource.data.username is string
                     && request.resource.data.username.matches('^[a-z0-9_]{3,20}$')
+ codex/create-premium-cinematic-website-for-crazverse-zn0ndf
+                    && request.resource.data.age is int
+                    && request.resource.data.age >= 4
+=======
                     && request.resource.data.age is int codex/create-premium-cinematic-website-for-crazverse-w2c026
                     && request.resource.data.age >= 4
 =======
                     && request.resource.data.age >= 13
+main
 main
                     && request.resource.data.age <= 120
                     && request.resource.data.gender in ['Woman', 'Man', 'Non-binary', 'Prefer not to say']
@@ -27,10 +32,14 @@ main
                     && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
                     && username.matches('^[a-z0-9_]{3,20}$')
                     && getAfter(/databases/$(database)/documents/players/$(request.auth.uid)).data.username == username;
+codex/create-premium-cinematic-website-for-crazverse-zn0ndf
+      allow read: if request.auth != null;
+=======
 codex/create-premium-cinematic-website-for-crazverse-w2c026
       allow read: if request.auth != null;
 =======
       allow get: if request.auth != null;
+main
 main
       allow update, delete: if false;
     }
